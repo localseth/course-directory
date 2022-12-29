@@ -1,33 +1,27 @@
 
 
-import './App.css';
+import './global.css';
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
 
-import axios from 'axios';
+// import components
+import Header from './components/Header';
+import Courses from './components/Courses';
+import Test from './components/Test';
+import CourseDetail from './components/CourseDetail';
 
 function App() {
-  const [courses, setCourses] = useState([]);
-  const fetchCourses = useCallback( async () => {
-    const resp = await axios("http://localhost:5000/api/courses");
-    setCourses(resp.data);
-  }, []);
-
-  useEffect( () => {
-    fetchCourses();
-  }, [fetchCourses]);
-
-  useEffect( () => {
-    console.log(courses[0]);
-  }, [courses])
 
   return (
-    <div className="App">
-      <h1>page title</h1>
-      <ul>
-        {courses.map((course) =><li key={course.id}>{course.title}</li>)}
-      </ul>
-    </div>
+      <div>
+        <Header />
+        <Routes>
+          <Route path="/" element={<Test />} />
+          <Route path="/courses" element={<Courses />} />
+          <Route path="/courses/:id" element={<CourseDetail />} />
+        </Routes>
+      </div>
   );
 }
 
