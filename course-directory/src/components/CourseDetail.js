@@ -55,7 +55,7 @@ const CourseDetail = (props) => {
                                 <h3 className='course--detail--title'>Course</h3>
                                 <h4 className='course--name'>{course.title}</h4>
                                 <p>By {course.owner.firstName} {course.owner.lastName}</p>
-                                {splitString(course.description).map(desc => <p>{desc}</p>)}
+                                {splitString(course.description).map((desc, i) => <p key={i}>{desc}</p>)}
                             </div>
                             <div>
                                 <h3 className='course--detail--title'>Estimated Time</h3>

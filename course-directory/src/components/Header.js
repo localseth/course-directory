@@ -1,7 +1,7 @@
 // stateless component
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 const Header = () => {
     return (
@@ -10,8 +10,8 @@ const Header = () => {
                 <h1 className="header--logo"><Link to="/courses">Courses</Link></h1>
                 <nav>
                     <ul className="header--signedout">
-                        <li>Sign Up</li>
-                        <li>Sign In</li>
+                        <li><NavLink to="/signin">Sign In</NavLink></li>
+                        <li><NavLink to="/signup">Sign Up</NavLink></li>
                     </ul>
                 </nav>
             </div>
