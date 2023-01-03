@@ -11,7 +11,7 @@ const UserSignIn = () => {
 
     const handleCancel = (e) => {
         e.preventDefault();
-        navigate(location.state || '/')
+        navigate(-1);
     }
 
     return (

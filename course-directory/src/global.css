@@ -219,7 +219,7 @@ input:focus,
 button:focus,
 .button:focus,
 textarea:focus {
-  border: 1px solid #332a40;
+  /* border: 1px solid #332a40; */
   /* border-radius: inherit; */
   outline: none;
   box-shadow: 0 2px 0 #7c689b7c;
