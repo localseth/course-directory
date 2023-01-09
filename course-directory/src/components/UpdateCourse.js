@@ -72,7 +72,7 @@ const UpdateCourse = () => {
                                             onChange={e => setTitle(e.target.value)}
                                         />
 
-                                        <p>By {authUser}</p>
+                                        <p>By {course.owner.firstName} {course.owner.lastName}</p>
 
                                         <label htmlFor="courseDescription">Course Description</label>
                                         <textarea

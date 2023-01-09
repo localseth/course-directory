@@ -1,18 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import Form from './Form';
 
-const UserSignIn = (props) => {
+import { UserContext } from './Context';
 
+const UserSignIn = () => {
+
+    const { authenticatedUser, actions } = useContext(UserContext);
     const navigate = useNavigate();
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [errors, setErrors] = useState('');
+    const [errors, setErrors] = useState([]);
 
     const submit = () => {
-        console.log('Submit button pressed');
+        actions.signIn(username, password);
+        // console.log(authenticatedUser);
     }
 
     const cancel = () => {

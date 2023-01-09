@@ -1,12 +1,15 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useContext, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import config from '../config';
 
+import { UserContext } from './Context';
+
+// components
 import Form from './Form';
 
 const CreateCourse = () => {
-    const [authUser, setAuthUser] = useState('Authorized User');
+    const { authenticatedUser } = useContext(UserContext);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [estimatedTime, setEstimatedTime] = useState('');
@@ -14,6 +17,7 @@ const CreateCourse = () => {
     const [errors, setErrors] = useState([]);
 
     const url = config.apiBaseUrl;
+    const { firstName, lastName } = authenticatedUser;
 
     const navigate = useNavigate();
 
@@ -48,7 +52,7 @@ const CreateCourse = () => {
                                         onChange={e => setTitle(e.target.value)}
                                     />
 
-                                    <p>By {authUser}</p>
+                                    <p>By {firstName} {lastName}</p>
 
                                     <label htmlFor="courseDescription">Course Description</label>
                                     <textarea
