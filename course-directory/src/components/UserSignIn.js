@@ -1,30 +1,31 @@
 import React, { useState, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 import Form from './Form';
 
 import { UserContext } from './Context';
 
-const UserSignIn = () => {
+const UserSignIn = (props) => {
 
-    const { authenticatedUser, actions } = useContext(UserContext);
+    const { authenticatedUser, actions, errors } = useContext(UserContext);
     const navigate = useNavigate();
+    const location = useLocation();
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [errors, setErrors] = useState([]);
 
     const submit = () => {
+        const from = location.state ? location.state.from : '/';
         actions.signIn(username, password);
-        // console.log(authenticatedUser);
+        console.log(location);
+        if (authenticatedUser) {
+            navigate(from);
+        }
     }
 
     const cancel = () => {
-        navigate(-1);
-    }
-
-    const handleChange = (e) => {
-        // Can I pass a function such as setUserName or setPassword as a function by calling in the onChange event?
+        const to = authenticatedUser ? '/' : -1
+        navigate(to);
     }
 
     return (

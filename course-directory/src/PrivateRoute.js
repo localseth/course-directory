@@ -15,10 +15,17 @@ const PrivateRoute = () => {
     }, [params]);
 
     if (location.pathname === '/courses/create') {
-        return authenticatedUser ? <Outlet /> : <Navigate to="/signin" />;
+        return authenticatedUser ? <Outlet /> : <Navigate to="/signin" state={{from: location.pathname}} />;
     } else if (location.pathname.includes('/update')) {
         if (authenticatedUser){
-            return authenticatedUser.emailAddress === course.owner.emailAddress ? <Outlet /> : <Navigate to="/signin" />;
+            return authenticatedUser.emailAddress === course.owner.emailAddress
+            ?
+                <Outlet />
+            :
+                <Navigate
+                    to="/signin"
+                    state={{from: location.pathname}}
+                />;
         } else {
             return <Navigate to="/signin" />
         }

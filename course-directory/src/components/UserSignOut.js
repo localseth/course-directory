@@ -7,13 +7,12 @@ import { UserContext } from './Context';
 
 const UserSignOut = () => {
     const [redirect, setRedirect] = useState(false);
-    // const navigate = useNavigate();
     const { actions } = useContext(UserContext);
     useEffect( () => actions.signOut(), [actions]);
   
     setTimeout( () => {
         setRedirect(true);
-    }, 3000);
+    }, 2000);
 
     if (!redirect) {
         return (

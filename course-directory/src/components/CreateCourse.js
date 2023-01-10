@@ -1,29 +1,36 @@
-import React, { useState, useContext, useCallback, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import config from '../config';
 
-import { UserContext } from './Context';
+
+import { UserContext, CourseContext } from './Context';
 
 // components
 import Form from './Form';
 
 const CreateCourse = () => {
     const { authenticatedUser } = useContext(UserContext);
+    const { actions } = useContext(CourseContext);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [estimatedTime, setEstimatedTime] = useState('');
     const [materials, setMaterials] = useState('');
     const [errors, setErrors] = useState([]);
 
-    const url = config.apiBaseUrl;
     const { firstName, lastName } = authenticatedUser;
+
+    const body = {
+        title,
+        description,
+        estimatedTime,
+        materials,
+        id: authenticatedUser.id
+    }
 
     const navigate = useNavigate();
 
     const submit = () => {
         console.log('Submit button pressed');
-        axios.put(`${url}/courses`)
+        actions.createCourse('/courses', body)
     }
 
     const cancel = () => {

@@ -1,34 +1,28 @@
-import React, { createContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 // import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import Data from '../../Data';
+import config from '../../config';
 
 export const UserContext = createContext();
 export const CourseContext = createContext();
 
 export const Provider = (props) => {
     const cookie = Cookies.get('authenticatedUser');
-    // const params = useParams();
+    const url = config.apiBaseUrl;
 
     // initialize state
     const [course, setCourse] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [user, setUser] = useState({authenticatedUser: cookie ? JSON.parse(cookie) : null});
+    const [errors, setErrors] = useState([]);
     const data = new Data();
 
     // user context setup
     const updateUser = (str) => {
         setUser(str);
     }
-
-    // useEffect( () => {
-    //     console.log(user);
-    // }, [user]);
-
-    // useEffect( () => {
-    //     console.log(course);
-    // }, [course]);
 
     useEffect( () => {
         console.log('isLoading state has changed')
@@ -44,6 +38,7 @@ export const Provider = (props) => {
             }
           });
           Cookies.set('authenticatedUser', JSON.stringify(user), { expires: 1});
+          console.log(user);
         }
         return user;
     }
@@ -57,6 +52,7 @@ export const Provider = (props) => {
     const userValue = {
         authenticatedUser,
         data: data,
+        errors,
         actions: {
             updateUser: updateUser,
             signIn: signIn,
@@ -71,14 +67,22 @@ export const Provider = (props) => {
                 console.log('fetching course #' + id)
                 setCourse(response.data);
                 setIsLoading(false);
-        });
+            })
+            .catch(err => console.log(err));
     };
+
+    const createCourse = async (path, body) => {
+        await axios.post(url + path,body)
+            .then(res => console.log(res))
+            .catch(err => console.log(err));
+    }
 
     const courseValue = {
         course,
         isLoading,
         actions: {
-            fetchCourse: fetchCourse 
+            fetchCourse: fetchCourse,
+            createCourse: createCourse 
         }
     }
 

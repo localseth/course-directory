@@ -14,7 +14,7 @@ const Header = () => {
             <div className="wrap header--flex">
                 <h1 className="header--logo"><Link to="/courses">Courses</Link></h1>
                 <nav>
-                {authenticatedUser ? 
+                {authenticatedUser !== null ? 
                     <ul className='header--signedin'>
                         <li>Welcome, {authenticatedUser.firstName}!</li>
                         <li><NavLink to="/signout">Sign Out</NavLink></li>
