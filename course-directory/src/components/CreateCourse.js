@@ -13,7 +13,7 @@ const CreateCourse = () => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [estimatedTime, setEstimatedTime] = useState('');
-    const [materials, setMaterials] = useState('');
+    const [materialsNeeded, setMaterials] = useState('');
     const [errors, setErrors] = useState([]);
 
     const { firstName, lastName } = authenticatedUser;
@@ -22,15 +22,20 @@ const CreateCourse = () => {
         title,
         description,
         estimatedTime,
-        materials,
-        id: authenticatedUser.id
+        materialsNeeded,
+        userId: authenticatedUser.id
     }
 
     const navigate = useNavigate();
 
     const submit = () => {
         console.log('Submit button pressed');
-        actions.createCourse('/courses', body)
+        actions.createCourse(body)
+            .then(res => {
+                if (res.length) {
+                    setErrors(res);
+                }
+            });
     }
 
     const cancel = () => {
@@ -83,7 +88,7 @@ const CreateCourse = () => {
                                     <textarea
                                         id="materialsNeeded"
                                         name="materialsNeeded"
-                                        value={materials}
+                                        value={materialsNeeded}
                                         onChange={e => setMaterials(e.target.value)}
                                     />
                                 </div>

@@ -7,20 +7,24 @@ import { UserContext } from './Context';
 
 const UserSignIn = (props) => {
 
-    const { authenticatedUser, actions, errors } = useContext(UserContext);
+    const { username, password, authenticatedUser, actions, errors } = useContext(UserContext);
+    const { setUsername, setPassword, signIn } = actions;
     const navigate = useNavigate();
     const location = useLocation();
 
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const [signInError, setSignInError] = useState('');
 
     const submit = () => {
         const from = location.state ? location.state.from : '/';
-        actions.signIn(username, password);
+        signIn()
+            .then(user => {
+                if (user === null) {
+                    setSignInError('User not authorized')
+                } else {
+                    navigate(from);
+                }
+            });
         console.log(location);
-        if (authenticatedUser) {
-            navigate(from);
-        }
     }
 
     const cancel = () => {
@@ -28,10 +32,25 @@ const UserSignIn = (props) => {
         navigate(to);
     }
 
+    const Unauthorized = () => {
+        let errorsDisplay = null;
+        if (signInError) {
+            errorsDisplay = (
+                <div className="validation--errors">
+                    <h3>{signInError}</h3>
+                </div>
+            )
+        }
+
+        return errorsDisplay;
+    }
+
     return (
         <main>
             <div className="form--centered">
                 <h2>Sign In</h2>
+
+                <Unauthorized />
                 
                 <Form
                     cancel={cancel}

@@ -52,4 +52,28 @@ export default class Data {
   //   }
   // }
 
+  async createCourse (path, method, body, username, password) {
+    const response = await this.api(path, method, body, true, { username, password });
+    if (response.status === 201 || response.status === 204) {
+      if (method === 'POST') {
+        console.log('Course created!');
+      }
+      else if (method === 'PUT') {
+        console.log('Course updated!')
+      }
+      return [];
+    }
+    else if (response.status !== 201 || response.status !== 204) {
+      console.log('there seems to be an issue');
+      return response.json().then(data => {
+        return data.message;
+      });
+    }
+
+
+    else {
+      throw new Error();
+    }
+  }
+
 }

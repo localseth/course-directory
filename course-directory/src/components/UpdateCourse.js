@@ -1,17 +1,23 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import config from '../config';
 
+//context
+import { UserContext, CourseContext } from './Context';
+
+//components
 import Form from './Form';
 
 const UpdateCourse = () => {
+    const { authenticatedUser } = useContext(UserContext);
+    const { actions } = useContext(CourseContext);
     const [course, setCourse] = useState([]);
     const [authUser, setAuthUser] = useState('Authorized User');
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [estimatedTime, setEstimatedTime] = useState('');
-    const [materials, setMaterials] = useState('');
+    const [materialsNeeded, setMaterials] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [errors, setErrors] = useState([]);
 
@@ -19,6 +25,16 @@ const UpdateCourse = () => {
     const params = useParams();
 
     const url = config.apiBaseUrl;
+
+    // set up request body
+    const body = {
+        id: params.id,
+        title,
+        description,
+        estimatedTime,
+        materialsNeeded,
+        userId: authenticatedUser.id
+    }
 
     const fetchCourse = useCallback( async () => {
         await axios.get(`${url}/courses/${params.id}`)
@@ -32,8 +48,16 @@ const UpdateCourse = () => {
         });
     }, [params.id]);
 
-    const submit = () => {
+    const submit = async () => {
         console.log('Submit button pressed');
+        await actions.updateCourse(params.id, body)
+            .then(res => {
+                if (res.length) {
+                    setErrors(res);
+                } else {
+                    navigate(`/courses/${params.id}`);
+                }
+            });
     }
 
     const cancel = () => {
@@ -96,7 +120,7 @@ const UpdateCourse = () => {
                                         <textarea
                                             id="materialsNeeded"
                                             name="materialsNeeded"
-                                            value={materials}
+                                            value={materialsNeeded}
                                             onChange={e => setMaterials(e.target.value)}
                                         />
                                     </div>
