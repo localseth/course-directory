@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, Navigate, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown'
 import axios from 'axios';
 
@@ -12,6 +12,7 @@ const CourseDetail = (props) => {
     const [errors, setErrors] = useState([]);
 
     const params = useParams();
+    const navigate = useNavigate();
     
     // const fetchCourse = useCallback( async () => {
     //     await axios.get(`http://localhost:5000/api/courses/${params.id}`).then(response => {
@@ -30,6 +31,8 @@ const CourseDetail = (props) => {
             .then(res => {
                 if (res.length) {
                     setErrors(res);
+                } else {
+                    navigate('/')
                 }
             });
     }, [params.id] );

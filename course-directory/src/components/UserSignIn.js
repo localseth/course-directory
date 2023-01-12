@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, Navigate, useNavigate, useLocation } from 'react-router-dom';
 
 import Form from './Form';
 
@@ -46,6 +46,10 @@ const UserSignIn = (props) => {
     }
 
     return (
+        authenticatedUser 
+        ?
+        <Navigate to="/" />
+        :
         <main>
             <div className="form--centered">
                 <h2>Sign In</h2>
