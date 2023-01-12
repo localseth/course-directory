@@ -78,6 +78,9 @@ header nav a:hover {
   margin-bottom: 1.5rem;
   display: block;
 }
+.course--module:hover {
+  opacity: 85%;
+}
 .course--label {
   color: #fff;
   font-size: 0.9rem;
@@ -218,7 +221,8 @@ textarea {
 input:focus,
 button:focus,
 .button:focus,
-textarea:focus {
+textarea:focus,
+.course--module:focus {
   /* border: 1px solid #332a40; */
   /* border-radius: inherit; */
   outline: none;

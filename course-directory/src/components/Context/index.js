@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-// import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import Data from '../../Data';
@@ -12,6 +12,8 @@ export const Provider = (props) => {
     const cookie = Cookies.get('authenticatedUser');
     const passCookie = Cookies.get('pass');
     const url = config.apiBaseUrl;
+
+    const navigate = useNavigate();
 
     // initialize state
     const [course, setCourse] = useState([]);
@@ -69,11 +71,13 @@ export const Provider = (props) => {
     }
 
     // course context setup
+
+    // this function passes a request to the api by accepting the id from the route on the page rendering the CourseDetail component
     const fetchCourse = async (id) => {
         setIsLoading(true);
         await axios.get(`http://localhost:5000/api/courses/${id}`)
             .then(response => {
-                console.log('fetching course #' + id)
+                console.log('fetching course #' + id, response.data);
                 setCourse(response.data);
                 setIsLoading(false);
             })
@@ -101,6 +105,7 @@ export const Provider = (props) => {
         course,
         isLoading,
         actions: {
+            setCourse: setCourse,
             fetchCourse: fetchCourse,
             createCourse: createCourse,
             updateCourse: updateCourse,

@@ -1,3 +1,4 @@
+// this component handles http requests
 import config from './config';
 
 export default class Data {

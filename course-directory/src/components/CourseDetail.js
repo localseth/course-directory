@@ -30,11 +30,15 @@ const CourseDetail = (props) => {
 
     useEffect( () => {
         fetchCourse(params.id);
-    }, [params]);
+    }, []);
 
     if (isLoading) {
         return(
             <h1 className='wrap'>Loading...</h1>
+        )
+    } else if (!course.id) {
+        return (
+            <Navigate to="/notfound" />
         )
     } else {
         return (

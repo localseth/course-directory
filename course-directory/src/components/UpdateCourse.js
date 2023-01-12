@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useContext } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import config from '../config';
 
@@ -11,9 +11,10 @@ import Form from './Form';
 
 const UpdateCourse = () => {
     const { authenticatedUser } = useContext(UserContext);
-    const { actions } = useContext(CourseContext);
-    const [course, setCourse] = useState([]);
-    const [authUser, setAuthUser] = useState('Authorized User');
+    const { course, actions } = useContext(CourseContext);
+
+    const { setCourse } = actions;
+
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [estimatedTime, setEstimatedTime] = useState('');
@@ -28,7 +29,7 @@ const UpdateCourse = () => {
 
     // set up request body
     const body = {
-        id: params.id,
+        id: course.id,
         title,
         description,
         estimatedTime,

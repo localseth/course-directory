@@ -12,23 +12,25 @@ const PrivateRoute = () => {
 
     useEffect( () => {
         actions.fetchCourse(params.id);
-    }, [params]);
+    }, [params.id]);
 
-    if (location.pathname === '/courses/create') {
+    if (!course.id && location.pathname === '/courses/create') {
         return authenticatedUser ? <Outlet /> : <Navigate to="/signin" state={{from: location.pathname}} />;
-    } else if (location.pathname.includes('/update')) {
+    } else if (course.id && location.pathname.includes('/update')) {
         if (authenticatedUser){
-            return authenticatedUser.emailAddress === course.owner.emailAddress
+            return authenticatedUser.emailAddress === course.owner?.emailAddress
             ?
                 <Outlet />
             :
                 <Navigate
-                    to="/signin"
+                    to="/forbidden"
                     state={{from: location.pathname}}
                 />;
         } else {
-            return <Navigate to="/signin" />
+            return <Navigate to="/signin" state={{from: location.pathname}} />
         }
+    } else if (!course.id && location.pathname.includes('/update')) {
+        <Navigate to="/notfound" />
     }
 };
 
