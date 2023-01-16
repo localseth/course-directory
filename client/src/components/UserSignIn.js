@@ -12,19 +12,27 @@ const UserSignIn = (props) => {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [buttonText, setButtonText] = useState('Sign In');
+    const [disabled, setDisabled] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
 
     const [signInError, setSignInError] = useState('');
 
     const submit = () => {
+        setButtonText('Signing In...');
+        setDisabled(true);
         const from = location.state ? location.state.from : '/';
         signIn(username, password)
             .then(user => {
                 if (user === null) {
-                    setSignInError('User not authorized')
+                    setSignInError('User not authorized');
+                    setButtonText('Sign In');
+                    setDisabled(false)
                 } else {
-                    navigate(from);
+                    setTimeout(() => {
+                        navigate(from);
+                    }, 1000)
                 }
             });
         console.log(location);
@@ -63,7 +71,8 @@ const UserSignIn = (props) => {
                     cancel={cancel}
                     errors={errors}
                     submit={submit}
-                    submitButtonText="Sign In"
+                    submitButtonText={buttonText}
+                    disabled={disabled}
                     elements={ () => (
                         <>
                             <label htmlFor="emailAddress">Email Address</label>

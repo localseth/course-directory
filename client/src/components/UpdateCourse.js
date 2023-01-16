@@ -11,7 +11,7 @@ import Form from './Form';
 
 const UpdateCourse = () => {
     const { authenticatedUser } = useContext(UserContext);
-    const { course, actions } = useContext(CourseContext);
+    const { course, actions, isLoading } = useContext(CourseContext);
 
     const { setCourse } = actions;
 
@@ -19,7 +19,7 @@ const UpdateCourse = () => {
     const [description, setDescription] = useState('');
     const [estimatedTime, setEstimatedTime] = useState('');
     const [materialsNeeded, setMaterials] = useState('');
-    const [isLoading, setIsLoading] = useState(true);
+    const [buttonText, setButtonText] = useState('Update Course');
     const [errors, setErrors] = useState([]);
 
     const navigate = useNavigate();
@@ -40,6 +40,7 @@ const UpdateCourse = () => {
     const fetchCourse = useCallback( async () => {
         await axios.get(`${url}/courses/${params.id}`)
             .then(response => {
+                console.log(response.data);
                 if (response.status === 500) {
                     setErrors(500);
                 } else {
@@ -48,20 +49,24 @@ const UpdateCourse = () => {
                     setDescription(response.data.description);
                     setEstimatedTime(response.data.estimatedTime || '');
                     setMaterials(response.data.materialsNeeded || '');
-                    setIsLoading(false);
                 }
         });
     }, [params.id]);
 
     const submit = async () => {
+        setButtonText('Loading...');
         console.log('Submit button pressed');
         await actions.updateCourse(params.id, body)
             .then(res => {
+                console.log(res);
                 if (res?.length) {
                     console.log(res);
                     setErrors(res);
-                } else if (!res?.length) {
+                    setButtonText('Update Course')
+                } else if (!res?.length && res !== 500) {
                     navigate(`/courses/${params.id}`);
+                } else if (res && res === 500) {
+                    navigate('/error');
                 }
             });
     }
@@ -83,12 +88,12 @@ const UpdateCourse = () => {
         return (
             <main>
                 <div className="wrap">
-                    <h2>Create Course</h2>
+                    <h2>Update Course</h2>
                     <Form
                         cancel={cancel}
                         errors={errors}
                         submit={submit}
-                        submitButtonText='Update Course'
+                        submitButtonText={buttonText}
                         elements={ () => (
                             <>
                                 <div className="main--flex">

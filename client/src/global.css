@@ -203,7 +203,7 @@ textarea {
 .button:last-child {
   margin-bottom: 0;
 }
-.button:not(.button-secondary):hover {
+.button:not(.button-secondary):not([disabled]):hover {
   background: #63537d;
   cursor: pointer;
 }
@@ -227,6 +227,11 @@ textarea:focus,
   /* border-radius: inherit; */
   outline: none;
   box-shadow: 0 2px 0 #7c689b7c;
+}
+
+button.button:disabled {
+  opacity: 80%;
+  cursor: default !important;
 }
 
 @media screen and (min-width: 600px) {

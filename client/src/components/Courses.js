@@ -31,7 +31,7 @@ const Courses = (props) => {
 
     // const { courses } = props;
     return (
-        // isLoading ? <h1 className='wrap'>Loading...</h1> :
+        isLoading ? <h1 className='wrap'>Loading...</h1> :
             <main>
                 <div className="wrap main--grid">
                     {courses.map((course) => 

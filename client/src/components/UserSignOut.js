@@ -12,7 +12,7 @@ const UserSignOut = () => {
   
     setTimeout( () => {
         setRedirect(true);
-    }, 2000);
+    }, 1500);
 
     if (!redirect) {
         return (

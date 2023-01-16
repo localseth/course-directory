@@ -14,7 +14,7 @@ const PrivateRoute = () => {
         actions.fetchCourse(params.id);
     }, [params.id]);
 
-    if (!course.id && location.pathname === '/courses/create') {
+    if (location.pathname === '/courses/create') {
         return authenticatedUser ? <Outlet /> : <Navigate to="/signin" state={{from: location.pathname}} />;
     } else if (course.id && location.pathname.includes('/update')) {
         if (authenticatedUser){

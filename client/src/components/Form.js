@@ -9,6 +9,16 @@ const Form = (props) => {
     elements,
   } = props;
 
+  const disabled = props.disabled || null;
+
+  // const submitting = () => {
+  //   if (submitButtonText === 'Loading...') {
+  //     return true
+  //   } else {
+  //     return false
+  //   }
+  // }
+
   function handleSubmit(event) {
     event.preventDefault();
     submit();
@@ -24,7 +34,7 @@ const Form = (props) => {
       <ErrorsDisplay errors={errors} />
       <form onSubmit={handleSubmit}>
         {elements()}
-          <button className="button" type="submit">{submitButtonText}</button>
+          <button className="button" type="submit" disabled={disabled}>{submitButtonText}</button>
           <button className="button button-secondary" onClick={handleCancel}>Cancel</button>
       </form>
     </div>

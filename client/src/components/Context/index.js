@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import Data from '../../Data';
@@ -14,6 +14,7 @@ export const Provider = (props) => {
     const url = config.apiBaseUrl;
 
     const navigate = useNavigate();
+    const location = useLocation();
 
     // initialize state
     const [courses, setCourses] = useState([]);
@@ -35,6 +36,7 @@ export const Provider = (props) => {
     }, [isLoading]);
 
     const signIn = async (username, password) => {
+        setIsLoading(true);
         console.log('singIn function called!')
         const user = await data.getUser(username, password);
         if (user !== null) {
@@ -47,6 +49,7 @@ export const Provider = (props) => {
           Cookies.set('pass', password, { expires: 1 })
           console.log(user);
         }
+        setIsLoading(false);
         return user;
     }
 
@@ -89,24 +92,30 @@ export const Provider = (props) => {
         setIsLoading(true);
         await axios.get(url + `/courses/${id}`)
             .then(response => {
+                if (!response.data.id && !location.pathname.includes('/create')) {
+                    navigate('/notfound')
+                }
                 console.log('fetching course #' + id, response.data);
                 setCourse(response.data);
-                setIsLoading(false);
             })
             .catch(err => {
                 if (err.response.status === 500) {
                     navigate('/error');
                 }
                 console.log(err.response)
-            });
+            })
+            .finally(setIsLoading(false));
     };
 
     const fetchCourses = async () => {
         setIsLoading(true);
         await axios("http://localhost:5000/api/courses")
             .then(resp => {
-                console.log(resp.data);
-                setCourses(resp.data);
+                if (resp.data) {
+                    console.log(resp.data);
+                    setCourses(resp.data);
+                    setIsLoading(false);
+                }
             })
             .catch(err => {
                 console.error(err);
@@ -118,28 +127,36 @@ export const Provider = (props) => {
     }
 
     const createCourse = async (body) => {
+        setIsLoading(true);
         const course = await data.createCourse('/courses', 'POST', body, authenticatedUser.emailAddress, password )
         console.log(course);
+        setIsLoading(false);
         if (course === 500) {
             navigate('/error')
         } else {
             return course;
         }
+        
     }
 
     const updateCourse = async (id, body) => {
+        setIsLoading(true);
         const course = await data.createCourse(`/courses/${id}`, 'PUT', body, authenticatedUser.emailAddress, password )
         console.log(course);
+        setIsLoading(false);
         if (course === 500) {
-            console.log('navigating...')
-            navigate('/error')
+            console.log('navigating...');
+            // navigate('/error');
+            return course;
         } else {
             return course;
         }
     }
 
     const deleteCourse = async (id) => {
-        const course = await data.createCourse(`/courses/${id}`, 'DELETE', null, authenticatedUser.emailAddress, password )
+        setIsLoading(true);
+        const course = await data.createCourse(`/courses/${id}`, 'DELETE', null, authenticatedUser.emailAddress, password );
+        setIsLoading(false);
         if (course === 500) {
             navigate('/error')
         } else {

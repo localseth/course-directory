@@ -14,6 +14,9 @@ const UserSignUp = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState([]);
+    const [buttonText, setButtonText] = useState('Sign Up');
+    const [disabled, setDisabled] = useState(false);
+
     const navigate = useNavigate();
 
     const body = {
@@ -25,16 +28,27 @@ const UserSignUp = () => {
 
     const submit = () => {
         console.log('Submit button pressed');
+        setButtonText('Loading...');
+        setDisabled(true);
         actions.createUser(body, username, password)
             .then(res => {
                 if (res === 500) {
                     setErrors(res);
+                    setDisabled(false);
+                    setButtonText('Sign Up');
                 }
                 else if (res.length) {
                     setErrors(res);
+                    setDisabled(false);
+                    setButtonText('Sign Up');
                 } else {
+                    setDisabled(true);
                     actions.signIn(username, password);
-                    console.log(authenticatedUser, ' successfully signed in!')
+                    console.log(authenticatedUser, ' successfully signed in!');
+                    setButtonText('Signing in...');
+                    setTimeout(() => {
+                        navigate('/');
+                    }, 1500)
                 }
             });
     }
@@ -53,7 +67,8 @@ const UserSignUp = () => {
                     cancel={cancel}
                     errors={errors}
                     submit={submit}
-                    submitButtonText="Sign Up"
+                    submitButtonText={buttonText}
+                    disabled={disabled}
                     elements={ () => (
                         <>
                             <label htmlFor="firstName">First Name</label>

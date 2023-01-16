@@ -13,6 +13,7 @@ const CreateCourse = () => {
     const [description, setDescription] = useState('');
     const [estimatedTime, setEstimatedTime] = useState('');
     const [materialsNeeded, setMaterials] = useState('');
+    const [buttonText, setButtonText] = useState('Create Course');
     const [errors, setErrors] = useState([]);
 
     const { firstName, lastName } = authenticatedUser;
@@ -28,11 +29,15 @@ const CreateCourse = () => {
     const navigate = useNavigate();
 
     const submit = () => {
+        setButtonText('Loading...');
         console.log('Submit button pressed');
         actions.createCourse(body)
             .then(res => {
                 if (res?.length) {
                     setErrors(res);
+                    setButtonText('Create Course');
+                } else if (res && !res.length) {
+                    navigate('/');
                 }
             });
     }
@@ -49,7 +54,7 @@ const CreateCourse = () => {
                     cancel={cancel}
                     errors={errors}
                     submit={submit}
-                    submitButtonText='Create Course'
+                    submitButtonText={buttonText}
                     elements={ () => (
                         <>
                             <div className="main--flex">
