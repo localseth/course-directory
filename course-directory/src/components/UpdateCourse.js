@@ -40,12 +40,16 @@ const UpdateCourse = () => {
     const fetchCourse = useCallback( async () => {
         await axios.get(`${url}/courses/${params.id}`)
             .then(response => {
-                setCourse(response.data);
-                setTitle(response.data.title);
-                setDescription(response.data.description);
-                setEstimatedTime(response.data.estimatedTime || '');
-                setMaterials(response.data.materialsNeeded || '');
-                setIsLoading(false);
+                if (response.status === 500) {
+                    setErrors(500);
+                } else {
+                    setCourse(response.data);
+                    setTitle(response.data.title);
+                    setDescription(response.data.description);
+                    setEstimatedTime(response.data.estimatedTime || '');
+                    setMaterials(response.data.materialsNeeded || '');
+                    setIsLoading(false);
+                }
         });
     }, [params.id]);
 
@@ -53,9 +57,10 @@ const UpdateCourse = () => {
         console.log('Submit button pressed');
         await actions.updateCourse(params.id, body)
             .then(res => {
-                if (res.length) {
+                if (res?.length) {
+                    console.log(res);
                     setErrors(res);
-                } else {
+                } else if (!res?.length) {
                     navigate(`/courses/${params.id}`);
                 }
             });

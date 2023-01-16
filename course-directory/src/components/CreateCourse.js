@@ -1,11 +1,10 @@
 import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-
-
-import { UserContext, CourseContext } from './Context';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 // components
 import Form from './Form';
+
+import { UserContext, CourseContext } from './Context';
 
 const CreateCourse = () => {
     const { authenticatedUser } = useContext(UserContext);
@@ -32,7 +31,7 @@ const CreateCourse = () => {
         console.log('Submit button pressed');
         actions.createCourse(body)
             .then(res => {
-                if (res.length) {
+                if (res?.length) {
                     setErrors(res);
                 }
             });

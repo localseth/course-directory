@@ -1,20 +1,42 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 
+// components
 import Form from './Form';
 
-const UserSignUp = (props) => {
+import { UserContext } from './Context';
 
-    const navigate = useNavigate();
-    
+const UserSignUp = () => {
+    const { authenticatedUser, actions } = useContext(UserContext);
+
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [errors, setErrors] = useState('');
+    const [errors, setErrors] = useState([]);
+    const navigate = useNavigate();
+
+    const body = {
+        firstName,
+        lastName,
+        emailAddress: username,
+        password
+    }
 
     const submit = () => {
         console.log('Submit button pressed');
+        actions.createUser(body, username, password)
+            .then(res => {
+                if (res === 500) {
+                    setErrors(res);
+                }
+                else if (res.length) {
+                    setErrors(res);
+                } else {
+                    actions.signIn(username, password);
+                    console.log(authenticatedUser, ' successfully signed in!')
+                }
+            });
     }
 
     const cancel = () => {
@@ -22,6 +44,7 @@ const UserSignUp = (props) => {
     }
 
     return(
+        errors === 500 ? <Navigate to="/error" /> :
         <main>
             <div className="form--centered">
                 <h2>Sign Up</h2>

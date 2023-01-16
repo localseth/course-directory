@@ -51,6 +51,7 @@ router.get('/courses', asyncHandler(async (req, res) => {
             exclude: ['createdAt', 'updatedAt']
         },
     });
+    // res.status(500).end();
     res.json(courseData);
 }));
 
@@ -72,6 +73,7 @@ router.get('/courses/:id', asyncHandler(async (req, res) => {
         },
     });
     if(course){
+        // res.status(500).end();
         res.json(course);
     } else {
         res.json({message: 'Course not found for ID: ' + req.params.id});

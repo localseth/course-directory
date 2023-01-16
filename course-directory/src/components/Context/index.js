@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import Data from '../../Data';
@@ -16,6 +16,7 @@ export const Provider = (props) => {
     const navigate = useNavigate();
 
     // initialize state
+    const [courses, setCourses] = useState([]);
     const [course, setCourse] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [user, setUser] = useState({authenticatedUser: cookie ? JSON.parse(cookie) : null});
@@ -33,7 +34,7 @@ export const Provider = (props) => {
         console.log('isLoading state has changed')
     }, [isLoading]);
 
-    const signIn = async () => {
+    const signIn = async (username, password) => {
         console.log('singIn function called!')
         const user = await data.getUser(username, password);
         if (user !== null) {
@@ -52,7 +53,17 @@ export const Provider = (props) => {
     const signOut =  () => {
         setUser({authenticatedUser: null});
         Cookies.remove('authenticatedUser');
-        Cookies.remove('authKeys');
+        Cookies.remove('pass');
+    }
+
+    const createUser = async (user, username, password) => {
+        setIsLoading(true);
+        const userReq = await data.createUser(user);
+        if (!userReq.length) {
+            console.log(userReq.length);
+        }
+        setIsLoading(false);
+        return userReq;
     }
 
     const { authenticatedUser } = user;
@@ -66,6 +77,7 @@ export const Provider = (props) => {
             updateUser: updateUser,
             signIn: signIn,
             signOut: signOut,
+            createUser: createUser,
             setErrors: setErrors
         }
     }
@@ -81,32 +93,69 @@ export const Provider = (props) => {
                 setCourse(response.data);
                 setIsLoading(false);
             })
-            .catch(err => console.log(err.response.status));
+            .catch(err => {
+                if (err.response.status === 500) {
+                    navigate('/error');
+                }
+                console.log(err.response)
+            });
     };
+
+    const fetchCourses = async () => {
+        setIsLoading(true);
+        await axios("http://localhost:5000/api/courses")
+            .then(resp => {
+                console.log(resp.data);
+                setCourses(resp.data);
+            })
+            .catch(err => {
+                console.error(err);
+                if (err.response.status === 500) {
+                    navigate('/error');
+                }
+            })
+            .finally(setIsLoading(false));
+    }
 
     const createCourse = async (body) => {
         const course = await data.createCourse('/courses', 'POST', body, authenticatedUser.emailAddress, password )
         console.log(course);
-        return course;
+        if (course === 500) {
+            navigate('/error')
+        } else {
+            return course;
+        }
     }
 
     const updateCourse = async (id, body) => {
         const course = await data.createCourse(`/courses/${id}`, 'PUT', body, authenticatedUser.emailAddress, password )
         console.log(course);
-        return course;
+        if (course === 500) {
+            console.log('navigating...')
+            navigate('/error')
+        } else {
+            return course;
+        }
     }
 
     const deleteCourse = async (id) => {
         const course = await data.createCourse(`/courses/${id}`, 'DELETE', null, authenticatedUser.emailAddress, password )
-        return course;
+        if (course === 500) {
+            navigate('/error')
+        } else {
+            return course;
+        }
     }
 
     const courseValue = {
+        courses,
         course,
         isLoading,
         actions: {
+            setCourses: setCourses,
             setCourse: setCourse,
             fetchCourse: fetchCourse,
+            fetchCourses: fetchCourses,
             createCourse: createCourse,
             updateCourse: updateCourse,
             deleteCourse: deleteCourse 

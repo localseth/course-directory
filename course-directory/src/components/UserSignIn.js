@@ -7,8 +7,11 @@ import { UserContext } from './Context';
 
 const UserSignIn = (props) => {
 
-    const { username, password, authenticatedUser, actions, errors } = useContext(UserContext);
-    const { setUsername, setPassword, signIn } = actions;
+    const { authenticatedUser, actions, errors } = useContext(UserContext);
+    const { signIn } = actions;
+
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -16,7 +19,7 @@ const UserSignIn = (props) => {
 
     const submit = () => {
         const from = location.state ? location.state.from : '/';
-        signIn()
+        signIn(username, password)
             .then(user => {
                 if (user === null) {
                     setSignInError('User not authorized')

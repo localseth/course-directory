@@ -38,20 +38,23 @@ export default class Data {
     }
   }
   
-  // async createUser(user) {
-  //   const response = await this.api('/courses', 'POST', user);
-  //   if (response.status === 201) {
-  //     return [];
-  //   }
-  //   else if (response.status === 400) {
-  //     return response.json().then(data => {
-  //       return data.errors;
-  //     });
-  //   }
-  //   else {
-  //     throw new Error();
-  //   }
-  // }
+  async createUser(user) {
+    const response = await this.api('/users', 'POST', user);
+    if (response.status === 201) {
+      return [];
+    }
+    else if (response.status === 400) {
+      return response.json().then(data => {
+        return data.message;
+      });
+    }
+    else if (response.status === 500) {
+      return response.status;
+    }
+    else {
+      throw new Error();
+    }
+  }
 
   async createCourse (path, method, body, username, password) {
     const response = await this.api(path, method, body, true, { username, password });
@@ -64,12 +67,15 @@ export default class Data {
       }
       return [];
     }
+    else if (response.status === 500) {
+      return response.status;
+    }
     else if (response.status !== 201 || response.status !== 204) {
       console.log('there seems to be an issue');
       return response.json().then(data => {
         return data.message;
       });
-    }
+    } 
 
 
     else {
