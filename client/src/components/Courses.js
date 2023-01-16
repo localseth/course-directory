@@ -1,25 +1,10 @@
-import React, { useState, useEffect, useContext, useCallback} from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { useEffect, useContext} from 'react';
+import { Link } from 'react-router-dom';
 
 import { CourseContext } from './Context';
 
 const Courses = (props) => {
     const { actions, courses, isLoading } = useContext(CourseContext);
-    
-
-    const navigate = useNavigate();
-
-    // fetch list of courses
-    // const fetchCourses = useCallback( async () => {
-    //     const resp = await axios("http://localhost:5000/api/courses");
-    //     console.log(resp.data);
-    //     if (resp.status === 500) {
-    //         navigate('/error');
-    //     } else if (resp.status === 200) {
-    //         setCourses(resp.data);
-    //     }
-    // }, []);
 
     useEffect( () => {
         actions.fetchCourses();

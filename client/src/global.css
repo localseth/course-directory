@@ -234,6 +234,10 @@ button.button:disabled {
   cursor: default !important;
 }
 
+.actions--bar button {
+  line-height: 20px;
+}
+
 @media screen and (min-width: 600px) {
   .header--signedin li {
     display: inline-block;

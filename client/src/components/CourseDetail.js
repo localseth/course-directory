@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react';
-import { useParams, Link, Navigate, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown'
-import axios from 'axios';
 
 import { CourseContext, UserContext } from './Context';
 
@@ -44,7 +43,7 @@ const CourseDetail = (props) => {
                         {authenticatedUser && authenticatedUser.emailAddress === course?.owner?.emailAddress ?
                             <>
                                 <Link to={`/courses/${course?.id}/update`} className='button'>Update Course</Link>
-                                <a href="#" className='button' onClick={handleDelete}>Delete Course</a>
+                                <button className='button' onClick={handleDelete}>Delete Course</button>
                             </>
                             :
                             <></>

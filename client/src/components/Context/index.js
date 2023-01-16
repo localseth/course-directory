@@ -128,7 +128,7 @@ export const Provider = (props) => {
 
     const createCourse = async (body) => {
         setIsLoading(true);
-        const course = await data.createCourse('/courses', 'POST', body, authenticatedUser.emailAddress, password )
+        const course = await data.createCourse('/courses', 'POST', body, authenticatedUser.emailAddress, passCookie)
         console.log(course);
         setIsLoading(false);
         if (course === 500) {
@@ -141,7 +141,7 @@ export const Provider = (props) => {
 
     const updateCourse = async (id, body) => {
         setIsLoading(true);
-        const course = await data.createCourse(`/courses/${id}`, 'PUT', body, authenticatedUser.emailAddress, password )
+        const course = await data.createCourse(`/courses/${id}`, 'PUT', body, authenticatedUser.emailAddress, passCookie )
         console.log(course);
         setIsLoading(false);
         if (course === 500) {
@@ -155,7 +155,7 @@ export const Provider = (props) => {
 
     const deleteCourse = async (id) => {
         setIsLoading(true);
-        const course = await data.createCourse(`/courses/${id}`, 'DELETE', null, authenticatedUser.emailAddress, password );
+        const course = await data.createCourse(`/courses/${id}`, 'DELETE', null, authenticatedUser.emailAddress, passCookie );
         setIsLoading(false);
         if (course === 500) {
             navigate('/error')

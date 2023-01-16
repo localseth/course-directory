@@ -2,10 +2,8 @@
 
 import './global.css';
 
-import React, { useContext } from 'react';
+import React from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
-
-import { CourseContext } from './components/Context';
 
 // import components
 import Header from './components/Header';
@@ -22,14 +20,10 @@ import Forbidden from './components/Forbidden';
 import Error from './components/Error';
 
 function App() {
-
-  const { isLoading } = useContext(CourseContext);
   
   return (
       <div>
         <Header />
-        
-          {/* isLoading ? <h1 className='wrap'>Loading...</h1> : */}
           <Routes>
             <Route path="/" element={<Navigate to="/courses" />} />
             <Route path="/courses" element={<Courses />} />
