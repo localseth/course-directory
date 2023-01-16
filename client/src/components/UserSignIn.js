@@ -57,7 +57,7 @@ const UserSignIn = (props) => {
     }
 
     return (
-        authenticatedUser 
+        authenticatedUser && !disabled
         ?
         <Navigate to="/" />
         :
