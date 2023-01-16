@@ -75,13 +75,13 @@ export const Provider = (props) => {
     // this function passes a request to the api by accepting the id from the route on the page rendering the CourseDetail component
     const fetchCourse = async (id) => {
         setIsLoading(true);
-        await axios.get(`http://localhost:5000/api/courses/${id}`)
+        await axios.get(url + `/courses/${id}`)
             .then(response => {
                 console.log('fetching course #' + id, response.data);
                 setCourse(response.data);
                 setIsLoading(false);
             })
-            .catch(err => console.log(err));
+            .catch(err => console.log(err.response.status));
     };
 
     const createCourse = async (body) => {
