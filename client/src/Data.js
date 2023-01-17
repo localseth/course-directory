@@ -1,8 +1,8 @@
-// this component handles http requests
+// get url variable
 import config from './config';
 
 export default class Data {
-
+  // this function structures all the parameters for the HTTP requests
   api(path, method = 'GET', body = null, requiresAuth = false, credentials = null) {
     const url = config.apiBaseUrl + path;
   
@@ -17,6 +17,7 @@ export default class Data {
       options.body = JSON.stringify(body);
     }
 
+    // include and encode credentials if required
     if (requiresAuth) {
       const encodedCredentials = btoa(`${credentials.username}:${credentials.password}`);
       options.headers['Authorization'] = `Basic ${encodedCredentials}`;
@@ -25,6 +26,7 @@ export default class Data {
     return fetch(url, options);
   }
 
+  // authenticates user for signing in
   async getUser(username, password) {
     const response = await this.api(`/users`, 'GET', null, true, { username, password });
     if (response.status === 200) {
@@ -38,6 +40,7 @@ export default class Data {
     }
   }
   
+  // creates a new user in the database
   async createUser(user) {
     const response = await this.api('/users', 'POST', user);
     if (response.status === 201) {
@@ -56,6 +59,7 @@ export default class Data {
     }
   }
 
+  // writes new courses, updates courses, or deletes courses depending on parameters
   async createCourse (path, method, body, username, password) {
     const response = await this.api(path, method, body, true, { username, password });
     if (response.status === 201 || response.status === 204) {
@@ -76,8 +80,6 @@ export default class Data {
         return data.message;
       });
     } 
-
-
     else {
       throw new Error();
     }

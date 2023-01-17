@@ -9,22 +9,25 @@ export const UserContext = createContext();
 export const CourseContext = createContext();
 
 export const Provider = (props) => {
+    // set cookies
     const cookie = Cookies.get('authenticatedUser');
     const passCookie = Cookies.get('pass');
-    const url = config.apiBaseUrl;
-
-    const navigate = useNavigate();
-    const location = useLocation();
 
     // initialize state
     const [courses, setCourses] = useState([]);
     const [course, setCourse] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [user, setUser] = useState({authenticatedUser: cookie ? JSON.parse(cookie) : null});
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState(passCookie ? passCookie : '');
     const [errors, setErrors] = useState([]);
     const data = new Data();
+
+    // declare variables
+    const url = config.apiBaseUrl;
+
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const { authenticatedUser } = user;
 
     // user context setup
     const updateUser = (str) => {
@@ -35,6 +38,7 @@ export const Provider = (props) => {
         console.log('isLoading state has changed')
     }, [isLoading]);
 
+    // signs in the user and sets that user to authenticated if the api call is successful
     const signIn = async (username, password) => {
         setIsLoading(true);
         console.log('singIn function called!')
@@ -45,6 +49,7 @@ export const Provider = (props) => {
               authenticatedUser: user
             }
           });
+          // hold user credentials in local cookies
           Cookies.set('authenticatedUser', JSON.stringify(user), { expires: 1});
           Cookies.set('pass', password, { expires: 1 })
           console.log(user);
@@ -53,13 +58,15 @@ export const Provider = (props) => {
         return user;
     }
 
+    // removes the held user credentials from local cookies
     const signOut =  () => {
         setUser({authenticatedUser: null});
         Cookies.remove('authenticatedUser');
         Cookies.remove('pass');
     }
 
-    const createUser = async (user, username, password) => {
+    // calls the createUser function in Data.js and returns the response
+    const createUser = async (user) => {
         setIsLoading(true);
         const userReq = await data.createUser(user);
         if (!userReq.length) {
@@ -69,14 +76,12 @@ export const Provider = (props) => {
         return userReq;
     }
 
-    const { authenticatedUser } = user;
+    // data to be passed into components as needed
     const userValue = {
         authenticatedUser,
         data: data,
         errors,
         actions: {
-            setUsername: setUsername,
-            setPassword: setPassword,
             updateUser: updateUser,
             signIn: signIn,
             signOut: signOut,
@@ -107,6 +112,7 @@ export const Provider = (props) => {
             .finally(setIsLoading(false));
     };
 
+    // requests a list of all courses in the database
     const fetchCourses = async () => {
         setIsLoading(true);
         await axios("http://localhost:5000/api/courses")
@@ -126,6 +132,7 @@ export const Provider = (props) => {
             .finally(setIsLoading(false));
     }
 
+    // writes a new course to the database
     const createCourse = async (body) => {
         setIsLoading(true);
         const course = await data.createCourse('/courses', 'POST', body, authenticatedUser.emailAddress, passCookie)
@@ -139,6 +146,7 @@ export const Provider = (props) => {
         
     }
 
+    // updates an existing course
     const updateCourse = async (id, body) => {
         setIsLoading(true);
         const course = await data.createCourse(`/courses/${id}`, 'PUT', body, authenticatedUser.emailAddress, passCookie )
@@ -146,13 +154,13 @@ export const Provider = (props) => {
         setIsLoading(false);
         if (course === 500) {
             console.log('navigating...');
-            // navigate('/error');
             return course;
         } else {
             return course;
         }
     }
 
+    // deletes an existing course
     const deleteCourse = async (id) => {
         setIsLoading(true);
         const course = await data.createCourse(`/courses/${id}`, 'DELETE', null, authenticatedUser.emailAddress, passCookie );
@@ -164,6 +172,7 @@ export const Provider = (props) => {
         }
     }
 
+    // data relevent to courses to be passed to componenets as needed
     const courseValue = {
         courses,
         course,
@@ -179,6 +188,7 @@ export const Provider = (props) => {
         }
     }
 
+    // Higher Order Component to use context
     return (
         <UserContext.Provider value={userValue}>
             <CourseContext.Provider value={courseValue}>

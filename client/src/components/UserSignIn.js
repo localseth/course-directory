@@ -5,7 +5,7 @@ import Form from './Form';
 
 import { UserContext } from './Context';
 
-const UserSignIn = (props) => {
+const UserSignIn = () => {
 
     const { authenticatedUser, actions, errors } = useContext(UserContext);
     const { signIn } = actions;

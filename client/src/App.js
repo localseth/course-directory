@@ -38,6 +38,7 @@ function App() {
             <Route path="/forbidden" element={<Forbidden />} />
             <Route path="/error" element={<Error />} />?
             <Route path="/notfound" element={<NotFound />} />
+            <Route path="/*" element={<NotFound />} />
           </Routes>
         
       </div>
