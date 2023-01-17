@@ -18,6 +18,9 @@ Navigating to a route that requires an authenticated user will redirect the user
 
 If an authenticated user navigates to a route for which they do not have permission (e.g. updating a course that another user created), they are redirected to the `/forbidden` route.
 
+### Markdown Parsing
+When creating or updating a course, the description field and the materials field allow users to input markdown which will be interpreted when the `CourseDetail` page is rendered.
+
 ### Loading indicators
 The buttons for signing in and creating or updating courses will display different text and be disabled after clicking to avoid making two http requests at the same time.
 
