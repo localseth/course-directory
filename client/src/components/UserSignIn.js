@@ -3,22 +3,26 @@ import { Link, Navigate, useNavigate, useLocation } from 'react-router-dom';
 
 import Form from './Form';
 
+// get context
 import { UserContext } from './Context';
 
 const UserSignIn = () => {
 
-    const { authenticatedUser, actions, errors } = useContext(UserContext);
-    const { signIn } = actions;
+    const navigate = useNavigate();
+    const location = useLocation();
 
+    // set state
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [buttonText, setButtonText] = useState('Sign In');
     const [disabled, setDisabled] = useState(false);
-    const navigate = useNavigate();
-    const location = useLocation();
-
     const [signInError, setSignInError] = useState('');
 
+    // unpack context
+    const { authenticatedUser, actions, errors } = useContext(UserContext);
+    const { signIn } = actions;
+
+    // handles sign in, errors, and redirect after a successful sign in
     const submit = () => {
         setButtonText('Signing In...');
         setDisabled(true);
@@ -43,6 +47,7 @@ const UserSignIn = () => {
         navigate(to);
     }
 
+    // displays an "unauthorized" warning if sign in is unsuccessful
     const Unauthorized = () => {
         let errorsDisplay = null;
         if (signInError) {

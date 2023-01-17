@@ -9,23 +9,18 @@ const Form = (props) => {
     elements,
   } = props;
 
+  // disables submit button once clicked
   const disabled = props.disabled || null;
-
-  // const submitting = () => {
-  //   if (submitButtonText === 'Loading...') {
-  //     return true
-  //   } else {
-  //     return false
-  //   }
-  // }
 
   function handleSubmit(event) {
     event.preventDefault();
+    // this function is passed in from the parent component since some pages require different behavior
     submit();
   }
 
   function handleCancel(event) {
     event.preventDefault();
+    // this function is passed in just like the submit function above
     cancel();
   }
 
@@ -41,6 +36,7 @@ const Form = (props) => {
   );
 }
 
+// display errors if any
 function ErrorsDisplay({ errors }) {
   let errorsDisplay = null;
 

@@ -10,6 +10,7 @@ import { Provider } from './components/Context';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   
+    // set up router and context provider
     <BrowserRouter>
       <Provider>
         <App />

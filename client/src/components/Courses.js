@@ -1,11 +1,14 @@
 import React, { useEffect, useContext} from 'react';
 import { Link } from 'react-router-dom';
 
+// get course context
 import { CourseContext } from './Context';
 
-const Courses = (props) => {
+const Courses = () => {
+    // unpack context variables and functions
     const { actions, courses, isLoading } = useContext(CourseContext);
 
+    // get courses
     useEffect( () => {
         actions.fetchCourses();
     }, []);
@@ -14,11 +17,11 @@ const Courses = (props) => {
         console.log('course information has been loaded');
     }, [courses]);
 
-    // const { courses } = props;
     return (
         isLoading ? <h1 className='wrap'>Loading...</h1> :
             <main>
                 <div className="wrap main--grid">
+                    {/* map over courses to generate list */}
                     {courses.map((course) => 
                         <Link to={`/courses/${course.id}`} className="course--module course--link" key={course.id}>
                             <h2 className="course--label">Course</h2>

@@ -13,6 +13,7 @@ const UserSignUp = () => {
     // unpack variables from user context
     const { authenticatedUser, actions } = useContext(UserContext);
 
+    // set state
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [username, setUsername] = useState('');

@@ -4,11 +4,18 @@ import { useNavigate } from 'react-router-dom';
 // components
 import Form from './Form';
 
+// get context
 import { UserContext, CourseContext } from './Context';
 
 const CreateCourse = () => {
+
+    const navigate = useNavigate();
+
+    // unpack context variables and functions
     const { authenticatedUser } = useContext(UserContext);
     const { actions } = useContext(CourseContext);
+
+    // set state
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [estimatedTime, setEstimatedTime] = useState('');
@@ -16,8 +23,10 @@ const CreateCourse = () => {
     const [buttonText, setButtonText] = useState('Create Course');
     const [errors, setErrors] = useState([]);
 
+    // get authenticated user variables
     const { firstName, lastName } = authenticatedUser;
 
+    // package information to be passed to the API
     const body = {
         title,
         description,
@@ -26,17 +35,19 @@ const CreateCourse = () => {
         userId: authenticatedUser.id
     }
 
-    const navigate = useNavigate();
-
+    // pass course data to http request when form is submitted
     const submit = () => {
         setButtonText('Loading...');
         console.log('Submit button pressed');
         actions.createCourse(body)
             .then(res => {
+                // handle errors
                 if (res?.length) {
                     setErrors(res);
                     setButtonText('Create Course');
-                } else if (res && !res.length) {
+                } 
+                // or navigate to home route
+                else if (res && !res.length) {
                     navigate('/');
                 }
             });
@@ -74,7 +85,7 @@ const CreateCourse = () => {
                                     <textarea
                                         id="courseDescription"
                                         name="courseDescription"
-                                        // placeholder='Enter description here...'
+                                        placeholder='Enter description here...'
                                         value={description}
                                         onChange={e => setDescription(e.target.value)} />
                                 </div>

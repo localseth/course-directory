@@ -10,22 +10,24 @@ import { UserContext, CourseContext } from './Context';
 import Form from './Form';
 
 const UpdateCourse = () => {
+    
+    const navigate = useNavigate();
+    const params = useParams();
+    const url = config.apiBaseUrl;
+
+    // unpack context variables and functions
     const { authenticatedUser } = useContext(UserContext);
     const { course, actions, isLoading } = useContext(CourseContext);
 
     const { setCourse } = actions;
 
+    // set state
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [estimatedTime, setEstimatedTime] = useState('');
     const [materialsNeeded, setMaterials] = useState('');
     const [buttonText, setButtonText] = useState('Update Course');
     const [errors, setErrors] = useState([]);
-
-    const navigate = useNavigate();
-    const params = useParams();
-
-    const url = config.apiBaseUrl;
 
     // set up request body
     const body = {
@@ -37,13 +39,17 @@ const UpdateCourse = () => {
         userId: authenticatedUser.id
     }
 
+    // get specific course based on the url
     const fetchCourse = useCallback( async () => {
         await axios.get(`${url}/courses/${params.id}`)
             .then(response => {
                 console.log(response.data);
+                // handle server error
                 if (response.status === 500) {
                     setErrors(500);
-                } else {
+                } 
+                // otherwise set the returned course information to autopopulate each of the form fields
+                else {
                     setCourse(response.data);
                     setTitle(response.data.title);
                     setDescription(response.data.description);
@@ -51,8 +57,9 @@ const UpdateCourse = () => {
                     setMaterials(response.data.materialsNeeded || '');
                 }
         });
-    }, [params.id]);
+    },[params.id, setCourse, url]);
 
+    // handle passing the updated information to the http request
     const submit = async () => {
         setButtonText('Loading...');
         console.log('Submit button pressed');
@@ -74,11 +81,11 @@ const UpdateCourse = () => {
     const cancel = () => {
         navigate(-1);
     }
-
     
+    // call fetchCourse on page load
     useEffect( () => {
         fetchCourse();
-    }, [params.id]);
+    }, [fetchCourse]);
 
     if (isLoading) {
         return(

@@ -6,10 +6,15 @@ import { Navigate } from 'react-router-dom';
 import { UserContext } from './Context';
 
 const UserSignOut = () => {
+    // set state
     const [redirect, setRedirect] = useState(false);
+    
+    // unpack context actions
     const { actions } = useContext(UserContext);
+
     useEffect( () => actions.signOut(), []);
-  
+    
+    // handles state change to display a sign out message then redirects to the home route
     setTimeout( () => {
         setRedirect(true);
     }, 1500);

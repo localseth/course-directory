@@ -3,10 +3,11 @@
 import React, { useContext } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
+// get context
 import { UserContext } from './Context';
 
 const Header = () => {
-
+    // unpack context
     const { authenticatedUser } = useContext(UserContext);
 
     return (
@@ -14,6 +15,7 @@ const Header = () => {
             <div className="wrap header--flex">
                 <h1 className="header--logo"><Link to="/courses">Courses</Link></h1>
                 <nav>
+                {/* if user is authenticated, display name in header; otherwise display sign in and sign out buttons */}
                 {authenticatedUser !== null ? 
                     <ul className='header--signedin'>
                         <li>Welcome, {authenticatedUser.firstName}!</li>

@@ -4,17 +4,19 @@ import ReactMarkdown from 'react-markdown'
 
 import { CourseContext, UserContext } from './Context';
 
-
-const CourseDetail = (props) => {
-    const [errors, setErrors] = useState([]);
-
+const CourseDetail = () => {
     const params = useParams();
     const navigate = useNavigate();
 
+    // set state
+    const [errors, setErrors] = useState([]);
+
+    // unpack context variables
     const { course, actions, isLoading } = useContext(CourseContext);
     const { authenticatedUser } = useContext(UserContext);
     const fetchCourse = actions.fetchCourse;
 
+    // handles the DELETE request and navigates to the home route if the request is successful
     const handleDelete = useCallback( async () => {
         await actions.deleteCourse(params.id)
             .then(res => {
@@ -27,6 +29,7 @@ const CourseDetail = (props) => {
             });
     }, [params.id] );
 
+    // request data for the course specified in the url
     useEffect( () => {
         fetchCourse(params.id);
     }, []);

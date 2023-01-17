@@ -5,6 +5,7 @@ import Cookies from 'js-cookie';
 import Data from '../../Data';
 import config from '../../config';
 
+// declare context
 export const UserContext = createContext();
 export const CourseContext = createContext();
 
