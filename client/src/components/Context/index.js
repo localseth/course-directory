@@ -116,7 +116,7 @@ export const Provider = (props) => {
     // requests a list of all courses in the database
     const fetchCourses = async () => {
         setIsLoading(true);
-        await axios("http://localhost:5000/api/courses")
+        await axios(url + "/courses")
             .then(resp => {
                 if (resp.data) {
                     console.log(resp.data);
