@@ -27,11 +27,13 @@ const CourseDetail = () => {
                     navigate('/')
                 }
             });
+            // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [params.id] );
 
     // request data for the course specified in the url
     useEffect( () => {
         fetchCourse(params.id);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     if (isLoading) {

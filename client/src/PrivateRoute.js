@@ -16,6 +16,7 @@ const PrivateRoute = () => {
 
     useEffect( () => {
         actions.fetchCourse(params.id);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [params.id]);
     
     // only allow the user to access the CreateCourse component if they are authenticated, otherwise navigate to sign in page

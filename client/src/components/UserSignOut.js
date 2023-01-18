@@ -12,6 +12,7 @@ const UserSignOut = () => {
     // unpack context actions
     const { actions } = useContext(UserContext);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect( () => actions.signOut(), []);
     
     // handles state change to display a sign out message then redirects to the home route
