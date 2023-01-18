@@ -1,3 +1,4 @@
+// adding comment to test automatic redeploy
 import './global.css';
 
 import React from 'react';
