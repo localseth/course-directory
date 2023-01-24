@@ -43,8 +43,7 @@ const UserSignIn = () => {
     }
 
     const cancel = () => {
-        const to = authenticatedUser ? '/' : -1
-        navigate(to);
+        navigate('/');
     }
 
     // displays an "unauthorized" warning if sign in is unsuccessful
